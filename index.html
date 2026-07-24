@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Glide — The Modern PDF Viewer for Android</title>
+<meta name="description" content="Glide is a fast, focused reader for PDFs and text files. Multi-document tabs, auto-resume, bookmarks, night mode, and layouts that flow across phone, tablet and foldable. One-time purchase, no subscription." />
+<meta name="theme-color" content="#0c0d12" />
+<!-- Open Graph -->
+<meta property="og:title" content="Glide — The Modern PDF Viewer" />
+<meta property="og:description" content="Read more. Fumble less. A fast, focused reader for PDFs and text files." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="assets/screenshots/library.png" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%235B21B6'/%3E%3Cpath d='M28 30h30a10 10 0 0 1 10 10v34a8 8 0 0 0-8-8H28z' fill='%23c4b5fd'/%3E%3Cpath d='M72 30H42a10 10 0 0 0-10 10v34a8 8 0 0 1 8-8h32z' fill='%23fff' opacity='.55'/%3E%3C/svg%3E" />
+<style>
+  :root{
+    --bg:#0c0d12; --bg-2:#101118; --surface:#15161f; --surface-2:#1b1d27;
+    --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+    --text:#f4f4f7; --muted:#a3a4b0; --faint:#71727e;
+    --brand:#7c3aed; --brand-2:#5B21B6; --lav:#c4b5fd;
+    --g-lib:#5B21B6; --g-mem:#2563EB; --g-find:#0891B2; --g-read:#059669; --g-txt:#CA8A04; --g-sec:#B91C1C;
+    --maxw:1120px; --radius:20px;
+    --shadow:0 30px 80px -30px rgba(0,0,0,.75);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--lav);
+    padding:6px 12px;border:1px solid var(--line-2);border-radius:999px;background:rgba(124,58,237,.08);
+  }
+  h1,h2,h3{margin:0;line-height:1.08;letter-spacing:-.02em}
+  .muted{color:var(--muted)}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(12,13,18,.72);backdrop-filter:saturate(160%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:-.01em}
+  .logo{width:34px;height:34px;border-radius:10px;flex:none;box-shadow:0 6px 18px -6px rgba(124,58,237,.8)}
+  .nav-links{display:flex;gap:30px;font-size:15px;font-weight:500}
+  .nav-links a{color:var(--muted);transition:color .18s}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{display:flex;align-items:center;gap:14px}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    font-weight:700;font-size:15px;padding:12px 20px;border-radius:12px;
+    border:1px solid transparent;cursor:pointer;transition:transform .12s ease,box-shadow .2s,background .2s;white-space:nowrap;
+  }
+  .btn-primary{
+    background:linear-gradient(180deg,#8b5cf6,#6d28d9);color:#fff;
+    box-shadow:0 10px 30px -10px rgba(124,58,237,.75),inset 0 1px 0 rgba(255,255,255,.25);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(124,58,237,.9)}
+  .btn-ghost{background:var(--surface-2);color:var(--text);border-color:var(--line-2)}
+  .btn-ghost:hover{background:#232532;transform:translateY(-2px)}
+  .btn-lg{padding:16px 30px;font-size:16.5px;border-radius:14px}
+  .btn-sm{padding:9px 16px;font-size:14px}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;padding:84px 0 40px;overflow:hidden}
+  .hero::before{
+    content:"";position:absolute;inset:-30% 0 auto;height:720px;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(60% 55% at 20% 8%,rgba(124,58,237,.30),transparent 60%),
+      radial-gradient(50% 50% at 88% 0%,rgba(37,99,235,.22),transparent 60%),
+      radial-gradient(40% 40% at 60% 40%,rgba(8,145,178,.14),transparent 60%);
+    filter:blur(6px);
+  }
+  .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .hero h1{font-size:clamp(38px,6vw,66px);font-weight:850;margin:22px 0 0}
+  .hero h1 .accent{background:linear-gradient(90deg,#c4b5fd,#8b5cf6 55%,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.sub{font-size:clamp(16.5px,2.1vw,19.5px);color:var(--muted);margin:20px 0 0;max-width:560px}
+  .hero-actions{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+  .trust{display:flex;gap:10px 22px;flex-wrap:wrap;margin-top:22px;color:var(--faint);font-size:14px;font-weight:600}
+  .trust span{display:inline-flex;align-items:center;gap:8px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--lav);flex:none}
+
+  /* ---------- Phone frame ---------- */
+  .phone{
+    position:relative;border-radius:40px;padding:0;overflow:hidden;
+    border:1px solid var(--line-2);background:#000;
+    box-shadow:var(--shadow),0 0 0 8px rgba(255,255,255,.02);
+  }
+  .phone::after{content:"";position:absolute;inset:0;border-radius:40px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14);pointer-events:none}
+  .hero-phone{position:relative;justify-self:center;max-width:330px;width:100%}
+  .hero-phone .glow{position:absolute;inset:-14% -18%;z-index:-1;background:radial-gradient(50% 50% at 50% 45%,rgba(124,58,237,.45),transparent 70%);filter:blur(24px)}
+
+  /* ---------- Stat strip ---------- */
+  .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-2)}
+  .strip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:26px 0}
+  .stat{text-align:center}
+  .stat b{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em}
+  .stat span{color:var(--faint);font-size:13.5px;font-weight:600;letter-spacing:.02em}
+
+  /* ---------- Feature sections ---------- */
+  section.feature{padding:88px 0}
+  .feat{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .feat.rev .copy{order:2}
+  .feat .shot{display:flex;justify-content:center}
+  .feat .phone{max-width:300px}
+  .feat h2{font-size:clamp(27px,3.6vw,40px);font-weight:820;margin:16px 0 0}
+  .feat p.lead{color:var(--muted);font-size:17.5px;margin:16px 0 0;max-width:520px}
+  .flist{list-style:none;padding:0;margin:24px 0 0;display:flex;flex-direction:column;gap:13px}
+  .flist li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;color:#d9dae1}
+  .flist svg{flex:none;margin-top:3px}
+  .grp-lib{--c:var(--g-lib)} .grp-mem{--c:var(--g-mem)} .grp-find{--c:var(--g-find)}
+  .grp-read{--c:var(--g-read)} .grp-txt{--c:var(--g-txt)} .grp-sec{--c:var(--g-sec)}
+  .eyebrow.tag{color:#fff;border-color:transparent;background:var(--c);box-shadow:0 8px 22px -10px var(--c)}
+  .dual{display:flex;gap:18px;justify-content:center}
+  .dual .phone{max-width:210px}
+  .dual .phone:last-child{margin-top:36px}
+
+  /* ---------- Feature grid ---------- */
+  .band{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 52px}
+  .sec-head h2{font-size:clamp(28px,4vw,42px);font-weight:820;margin-top:16px}
+  .sec-head p{color:var(--muted);font-size:17px;margin-top:14px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 24px;transition:transform .16s ease,border-color .2s,background .2s;
+  }
+  .card:hover{transform:translateY(-4px);border-color:var(--line-2);background:var(--surface-2)}
+  .card .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;background:rgba(124,58,237,.14);border:1px solid var(--line-2)}
+  .card h3{font-size:18px;font-weight:750}
+  .card p{color:var(--muted);font-size:14.5px;margin:9px 0 0}
+
+  /* ---------- Chips ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:820px;margin:0 auto}
+  .chip{font-size:13.5px;font-weight:650;padding:8px 15px;border-radius:999px;border:1px solid var(--line-2);color:#dcdce3;background:var(--surface)}
+
+  /* ---------- Pricing ---------- */
+  .price-wrap{display:flex;justify-content:center}
+  .price-card{
+    position:relative;max-width:480px;width:100%;background:linear-gradient(180deg,var(--surface-2),var(--surface));
+    border:1px solid var(--line-2);border-radius:26px;padding:40px 36px;text-align:center;
+    box-shadow:var(--shadow);
+  }
+  .price-card::before{content:"";position:absolute;inset:0;border-radius:26px;padding:1px;background:linear-gradient(180deg,rgba(196,181,253,.5),transparent 40%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+  .price-badge{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--lav);margin-bottom:18px}
+  .price{font-size:60px;font-weight:850;letter-spacing:-.03em;line-height:1}
+  .price small{font-size:19px;font-weight:700;color:var(--muted);vertical-align:super;margin-right:2px}
+  .price-sub{color:var(--muted);margin-top:10px;font-size:15px}
+  .price-list{list-style:none;padding:0;margin:26px 0;text-align:left;display:flex;flex-direction:column;gap:12px}
+  .price-list li{display:flex;gap:11px;font-size:15.5px;color:#dcdce3}
+  .reassure{margin-top:16px;color:var(--faint);font-size:13px}
+
+  /* ---------- FAQ ---------- */
+  .faq{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+  details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 20px;transition:border-color .2s}
+  details[open]{border-color:var(--line-2)}
+  summary{cursor:pointer;list-style:none;font-weight:700;font-size:16.5px;padding:16px 0;display:flex;justify-content:space-between;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--lav);font-size:22px;font-weight:400;transition:transform .2s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{margin:0 0 18px;color:var(--muted);font-size:15px}
+
+  /* ---------- CTA banner ---------- */
+  .cta-banner{position:relative;overflow:hidden;border:1px solid var(--line-2);border-radius:28px;padding:56px 40px;text-align:center;background:linear-gradient(120deg,#1a1130,#0f1430)}
+  .cta-banner::before{content:"";position:absolute;inset:0;background:radial-gradient(50% 120% at 50% 0%,rgba(124,58,237,.35),transparent 60%);pointer-events:none}
+  .cta-banner h2{position:relative;font-size:clamp(28px,4vw,44px);font-weight:850}
+  .cta-banner p{position:relative;color:var(--muted);margin:14px auto 28px;max-width:520px;font-size:17px}
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line);padding:52px 0 40px;background:var(--bg-2)}
+  .foot-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;align-items:flex-start}
+  .foot-brand{max-width:340px}
+  .foot-brand p{color:var(--muted);font-size:14.5px;margin:14px 0 0}
+  .foot-links{display:flex;gap:56px;flex-wrap:wrap}
+  .foot-col h4{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:0 0 14px}
+  .foot-col a{display:block;color:var(--muted);font-size:14.5px;margin-bottom:10px;transition:color .18s}
+  .foot-col a:hover{color:var(--text)}
+  .foot-bottom{margin-top:40px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--faint);font-size:13px}
+  .stack{color:var(--faint);font-size:12.5px;margin-top:8px}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:900px){
+    .nav-links{display:none}
+    .hero-grid{grid-template-columns:1fr;gap:36px;text-align:center}
+    .hero-phone{order:-1}
+    .hero-actions,.trust{justify-content:center}
+    .hero p.sub{margin-left:auto;margin-right:auto}
+    .feat{grid-template-columns:1fr;gap:34px;text-align:center}
+    .feat.rev .copy{order:0}
+    .flist{align-items:center} .flist li{text-align:left}
+    .flist{max-width:420px;margin-left:auto;margin-right:auto}
+    .cards{grid-template-columns:1fr 1fr}
+    .strip-grid{grid-template-columns:1fr 1fr;gap:22px 12px}
+  }
+  @media(max-width:560px){
+    .cards{grid-template-columns:1fr}
+    .price-card{padding:32px 22px}
+    section.feature{padding:64px 0}
+    .nav-cta .btn-lg{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#5B21B6"/><path d="M28 30h30a10 10 0 0 1 10 10v34a8 8 0 0 0-8-8H28z" fill="#c4b5fd"/><path d="M72 30H42a10 10 0 0 0-10 10v34a8 8 0 0 1 8-8h32z" fill="#fff" opacity=".55"/></svg>
+      Glide
+    </a>
+    <nav class="nav-links">
+      <a href="#library">Library</a>
+      <a href="#reading">Reading</a>
+      <a href="#navigate">Navigate</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+    <div class="nav-cta">
+      <!-- Replace __STRIPE_PAYMENT_LINK__ with your Stripe Payment Link URL -->
+      <a class="btn btn-primary btn-sm" href="__STRIPE_PAYMENT_LINK__">Get Glide</a>
+    </div>
+  </div>
+</header>
+
+<a id="top"></a>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="copy">
+      <span class="eyebrow">The Modern PDF Viewer</span>
+      <h1>Read more.<br /><span class="accent">Fumble less.</span></h1>
+      <p class="sub">A fast, focused reader for PDFs <em>and</em> text files. Open your whole library as tabs, pick up on the exact page you left — every time — on phone, tablet and foldable.</p>
+      <div class="hero-actions">
+        <!-- Replace __STRIPE_PAYMENT_LINK__ with your Stripe Payment Link URL -->
+        <a class="btn btn-primary btn-lg" href="__STRIPE_PAYMENT_LINK__">Get Glide — €X.XX</a>
+        <a class="btn btn-ghost btn-lg" href="#library">See it in action</a>
+      </div>
+      <div class="trust">
+        <span><i class="dot"></i>One-time purchase</span>
+        <span><i class="dot"></i>No subscription</span>
+        <span><i class="dot"></i>PDF &amp; TXT</span>
+        <span><i class="dot"></i>Android</span>
+      </div>
+    </div>
+    <div class="hero-phone">
+      <div class="glow"></div>
+      <div class="phone"><img src="assets/screenshots/library.png" alt="Glide library screen showing pinned documents and reading progress" width="1080" height="2400" /></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAT STRIP ============ -->
+<div class="strip">
+  <div class="wrap strip-grid">
+    <div class="stat"><b>Tabs</b><span>Your whole library at once</span></div>
+    <div class="stat"><b>Auto-resume</b><span>Land on your exact page</span></div>
+    <div class="stat"><b>8× zoom</b><span>Pinch, pan &amp; double-tap</span></div>
+    <div class="stat"><b>Phone · Tablet · Fold</b><span>Adaptive on every screen</span></div>
+  </div>
+</div>
+
+<!-- ============ FEATURE 1 — LIBRARY ============ -->
+<section class="feature grp-lib" id="library">
+  <div class="wrap feat">
+    <div class="copy">
+      <span class="eyebrow tag">Your library — in tabs</span>
+      <h2>Every document you own, one tap away.</h2>
+      <p class="lead">Glide treats your files like a library you actually live in — not a pile of one-offs. Open several at once, pin the ones you reach for, and see how far you are before you even open them.</p>
+      <ul class="flist">
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-lib)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Multi-document tabs — switch instantly, like a browser for your books</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-lib)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Pin the important ones to the top of your library</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-lib)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Search, and sort by name, date added, recently opened or modified</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-lib)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Reading progress on every file: <code>p.45 / 500 · 9% · 3.2&nbsp;MB</code></li>
+      </ul>
+    </div>
+    <div class="shot"><div class="phone"><img loading="lazy" src="assets/screenshots/reading-tabs.png" alt="Reading view with document tabs along the bottom" width="1080" height="2400" /></div></div>
+  </div>
+</section>
+
+<!-- ============ FEATURE 2 — MEMORY ============ -->
+<section class="feature grp-mem" id="reading">
+  <div class="wrap feat rev">
+    <div class="copy">
+      <span class="eyebrow tag">Never lose your place</span>
+      <h2>Pick up exactly where you stopped.</h2>
+      <p class="lead">Every file remembers its own page, layout and position — independently. Close the app, reopen a week later, and you're right back on the line you were reading.</p>
+      <ul class="flist">
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-mem)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Auto-resume to your exact last page</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-mem)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Per-file memory — page, layout and position saved separately</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-mem)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Bookmark any page and jump straight back whenever you like</li>
+      </ul>
+    </div>
+    <div class="shot"><div class="phone"><img loading="lazy" src="assets/screenshots/bookmarks.png" alt="Bookmarks panel listing saved pages" width="1080" height="2400" /></div></div>
+  </div>
+</section>
+
+<!-- ============ FEATURE 3 — FIND ============ -->
+<section class="feature grp-find" id="navigate">
+  <div class="wrap feat">
+    <div class="copy">
+      <span class="eyebrow tag">Find anything, instantly</span>
+      <h2>Get to the right page in seconds.</h2>
+      <p class="lead">Long manuals and dense guides stop being a chore. Search inside the document, jump through its outline, or go straight to a page number.</p>
+      <ul class="flist">
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-find)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>In-document search with next / previous match</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-find)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Table of Contents — tap through the built-in outline</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-find)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Go to page — type a number and you're there</li>
+      </ul>
+    </div>
+    <div class="shot dual">
+      <div class="phone"><img loading="lazy" src="assets/screenshots/contents.png" alt="Table of Contents panel" width="1080" height="2400" /></div>
+      <div class="phone"><img loading="lazy" src="assets/screenshots/go-to-page.png" alt="Go to page dialog" width="1080" height="2400" /></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURE 4 — READ YOUR WAY ============ -->
+<section class="feature grp-read">
+  <div class="wrap feat rev">
+    <div class="copy">
+      <span class="eyebrow tag">Read it your way</span>
+      <h2>Single, double or cover — day or night.</h2>
+      <p class="lead">Choose the layout that fits the document and the device in your hands. Glide remembers your choice per file, and night mode inverts the page for comfortable low-light reading.</p>
+      <ul class="flist">
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-read)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Single, Double or book-style Cover layouts</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-read)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Layout remembered per file, restored automatically</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-read)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Night invert + immersive full-screen, tap to take over the page</li>
+      </ul>
+    </div>
+    <div class="shot dual">
+      <div class="phone"><img loading="lazy" src="assets/screenshots/layout-night.png" alt="Grid page layout in night mode" width="1080" height="2400" /></div>
+      <div class="phone"><img loading="lazy" src="assets/screenshots/layout-day.jpg" alt="Grid page layout in day mode" width="1080" height="2400" /></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURE 5 — CONTROLS ============ -->
+<section class="feature grp-lib">
+  <div class="wrap feat">
+    <div class="copy">
+      <span class="eyebrow tag">Powerful, out of the way</span>
+      <h2>Every control, one tap from the page.</h2>
+      <p class="lead">A clean toolbar keeps bookmarks, contents, page jumps and layout within reach — then gets out of your way so nothing sits between you and what you're reading.</p>
+      <ul class="flist">
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-lib)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Smooth pinch-zoom to 8×, double-tap zoom and free pan — without losing your place</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-lib)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Contents, bookmarks, go-to-page and layout in one menu</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--g-lib)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Clean dark interface designed to disappear while you read</li>
+      </ul>
+    </div>
+    <div class="shot"><div class="phone"><img loading="lazy" src="assets/screenshots/toolbar-menu.png" alt="Reading toolbar menu open" width="1080" height="2400" /></div></div>
+  </div>
+</section>
+
+<!-- ============ FEATURE GRID ============ -->
+<div class="band">
+  <section class="feature" id="features">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Everything you get</span>
+        <h2>Built for the way you actually read.</h2>
+        <p>One focused app that handles your whole document life — the big features above, plus all the details that make daily reading effortless.</p>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="var(--lav)" stroke-width="2"/><path d="M3 9h18" stroke="var(--lav)" stroke-width="2"/></svg></div><h3>Text files too</h3><p>Open <code>.txt</code> in a dedicated reading view with adjustable text size — and Glide remembers your spot there too.</p></div>
+        <div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="var(--lav)" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="var(--lav)" stroke-width="2"/></svg></div><h3>Password &amp; encrypted PDFs</h3><p>Unlock protected documents with a clean prompt — and a friendly retry if the password's wrong.</p></div>
+        <div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7l7-4z" stroke="var(--lav)" stroke-width="2" stroke-linejoin="round"/></svg></div><h3>Graceful with bad files</h3><p>Calm, clear messaging when a file is missing, damaged or unreadable. No crashes, no confusion.</p></div>
+        <div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="10" height="18" rx="2" stroke="var(--lav)" stroke-width="2"/><path d="M15 7h5v14h-8" stroke="var(--lav)" stroke-width="2" stroke-linejoin="round"/></svg></div><h3>Every screen</h3><p>Adaptive layout tuned for phones, large tablets and foldable / dual-screen devices.</p></div>
+        <div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="var(--lav)" stroke-width="2" stroke-linecap="round"/></svg></div><h3>Sort &amp; filter</h3><p>Order your collection by name, date added, recently opened or last modified — instantly.</p></div>
+        <div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="var(--lav)" stroke-width="2"/><path d="M12 7v5l3 2" stroke="var(--lav)" stroke-width="2" stroke-linecap="round"/></svg></div><h3>Rich file details</h3><p>Type, size, page count, location, date added and last opened — all at a glance.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ CHIPS ============ -->
+<section class="feature">
+  <div class="wrap">
+    <div class="sec-head"><h2>All of it, in one app.</h2></div>
+    <div class="chips">
+      <span class="chip">Tabbed reading</span><span class="chip">Pin to top</span><span class="chip">Library search</span>
+      <span class="chip">Sort &amp; filter</span><span class="chip">Reading progress</span><span class="chip">Auto-resume</span>
+      <span class="chip">Per-file memory</span><span class="chip">Bookmarks</span><span class="chip">Find in document</span>
+      <span class="chip">Table of Contents</span><span class="chip">Go to page</span><span class="chip">Single · Double · Cover</span>
+      <span class="chip">Zoom to 8× + pan</span><span class="chip">Immersive full-screen</span><span class="chip">Night invert</span>
+      <span class="chip">.txt support</span><span class="chip">Adjustable text size</span><span class="chip">Password / encrypted PDFs</span>
+      <span class="chip">Damaged-file safe</span><span class="chip">Phone · Tablet · Foldable</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<div class="band">
+  <section class="feature" id="pricing">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Pricing</span>
+        <h2>Buy once. Read forever.</h2>
+        <p>No subscription, no accounts, no ads. One payment and Glide is yours.</p>
+      </div>
+      <div class="price-wrap">
+        <div class="price-card">
+          <div class="price-badge">One-time purchase</div>
+          <!-- Set your price here -->
+          <div class="price"><small>€</small>X.XX</div>
+          <div class="price-sub">Lifetime access · Instant download</div>
+          <ul class="price-list">
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--lav)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Every feature — nothing locked behind a tier</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--lav)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>No subscription, ever</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--lav)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Free updates</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 6" stroke="var(--lav)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Your files stay on your device</li>
+          </ul>
+          <!-- Replace __STRIPE_PAYMENT_LINK__ with your Stripe Payment Link URL -->
+          <a class="btn btn-primary btn-lg" href="__STRIPE_PAYMENT_LINK__" style="width:100%">Get Glide — €X.XX</a>
+          <div class="reassure">Secure checkout via Stripe · Invoice included</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ FAQ ============ -->
+<section class="feature">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">FAQ</span><h2>Good to know.</h2></div>
+    <div class="faq">
+      <details><summary>What files does Glide open?</summary><p>PDF and plain-text <code>.txt</code> files. PDFs get the full reader — tabs, layouts, search, bookmarks, night mode — and text files open in a dedicated reading view with adjustable size.</p></details>
+      <details><summary>Which devices are supported?</summary><p>Android phones, tablets, and foldable / dual-screen devices. The layout adapts to whatever screen is in your hands.</p></details>
+      <details><summary>Is it a subscription?</summary><p>No. Glide is a single one-time purchase with free updates. No accounts, no ads, no recurring charges.</p></details>
+      <details><summary>Where are my documents stored?</summary><p>On your device. Glide reads your local files and remembers your reading position — nothing is uploaded.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BANNER ============ -->
+<section class="feature">
+  <div class="wrap">
+    <div class="cta-banner">
+      <h2>Open a dozen documents. Land on the right page. Every time.</h2>
+      <p>The modern PDF viewer, built for today's devices.</p>
+      <!-- Replace __STRIPE_PAYMENT_LINK__ with your Stripe Payment Link URL -->
+      <a class="btn btn-primary btn-lg" href="__STRIPE_PAYMENT_LINK__">Get Glide — €X.XX</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top">
+          <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#5B21B6"/><path d="M28 30h30a10 10 0 0 1 10 10v34a8 8 0 0 0-8-8H28z" fill="#c4b5fd"/><path d="M72 30H42a10 10 0 0 0-10 10v34a8 8 0 0 1 8-8h32z" fill="#fff" opacity=".55"/></svg>
+          Glide
+        </a>
+        <p>The modern PDF viewer. A fast, focused reader for PDFs and text files — built for phones, tablets and foldables.</p>
+        <p class="stack">Built with Flutter, powered by a high-performance PDF engine.</p>
+      </div>
+      <div class="foot-links">
+        <div class="foot-col">
+          <h4>Product</h4>
+          <a href="#library">Library</a>
+          <a href="#reading">Reading</a>
+          <a href="#navigate">Navigate</a>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+        <div class="foot-col">
+          <h4>Get Glide</h4>
+          <!-- Replace __STRIPE_PAYMENT_LINK__ with your Stripe Payment Link URL -->
+          <a href="__STRIPE_PAYMENT_LINK__">Buy now</a>
+          <a href="https://github.com/jk-hosting/Glide-app">Showcase</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Glide · v1.0.0</span>
+      <span>The Modern PDF Viewer</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
