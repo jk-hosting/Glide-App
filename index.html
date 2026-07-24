@@ -55,13 +55,15 @@
   .nav-links a:hover{color:var(--text)}
   .nav-cta{display:flex;align-items:center;gap:14px}
 
-  /* ---------- More-apps top bar ---------- */
-  .topbar{border-bottom:1px solid var(--line);background:var(--bg-2)}
-  .topbar .wrap{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;min-height:38px;padding-top:7px;padding-bottom:7px;font-size:13px}
-  .topbar .ma-label{color:var(--faint);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:11.5px}
-  .topbar a{color:var(--muted);font-weight:600;transition:color .18s}
-  .topbar a:hover{color:var(--text)}
-  .topbar .sep{color:var(--line-2);user-select:none}
+  /* ---------- More-apps top bar (matches Beam's .appbar) ---------- */
+  .topbar{display:flex;justify-content:center;align-items:center;gap:11px;flex-wrap:wrap;
+    padding:9px 24px;font-size:.82rem;color:var(--muted);background:var(--bg-2);border-bottom:1px solid var(--line)}
+  .topbar .ma-label{font-weight:600;letter-spacing:.02em}
+  .topbar a{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--text);
+    padding:5px 13px;border-radius:999px;background:var(--surface);border:1px solid var(--line-2);
+    transition:border-color .2s,color .2s}
+  .topbar a:hover{border-color:var(--lav);color:var(--lav)}
+  .topbar a svg{width:12px;height:12px;opacity:.7}
 
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:9px;
@@ -227,16 +229,11 @@
 
 <!-- ============ MORE APPS ============ -->
 <div class="topbar">
-  <div class="wrap">
-    <span class="ma-label">More apps</span>
-    <a href="https://jk-hosting.github.io/BoulderLog-App/">BoulderLog</a>
-    <span class="sep">·</span>
-    <a href="https://jk-hosting.github.io/BoulderTrain-App/">BoulderTrain</a>
-    <span class="sep">·</span>
-    <a href="https://jk-hosting.github.io/CoffeeAeye-App/">Coffee Aeye</a>
-    <span class="sep">·</span>
-    <a href="https://jk-hosting.github.io/Beam-TV-App/">Beam</a>
-  </div>
+  <span class="ma-label">More apps</span>
+  <a href="https://jk-hosting.github.io/BoulderLog-App/">BoulderLog<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+  <a href="https://jk-hosting.github.io/BoulderTrain-App/">BoulderTrain<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+  <a href="https://jk-hosting.github.io/CoffeeAeye-App/">Coffee Aeye<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+  <a href="https://jk-hosting.github.io/Beam-TV-App/">Beam<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
 </div>
 
 <!-- ============ HEADER ============ -->
