@@ -55,6 +55,14 @@
   .nav-links a:hover{color:var(--text)}
   .nav-cta{display:flex;align-items:center;gap:14px}
 
+  /* ---------- More-apps top bar ---------- */
+  .topbar{border-bottom:1px solid var(--line);background:var(--bg-2)}
+  .topbar .wrap{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;min-height:38px;padding-top:7px;padding-bottom:7px;font-size:13px}
+  .topbar .ma-label{color:var(--faint);font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:11.5px}
+  .topbar a{color:var(--muted);font-weight:600;transition:color .18s}
+  .topbar a:hover{color:var(--text)}
+  .topbar .sep{color:var(--line-2);user-select:none}
+
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:9px;
     font-weight:700;font-size:15px;padding:12px 20px;border-radius:12px;
@@ -216,6 +224,18 @@
 </style>
 </head>
 <body>
+
+<!-- ============ MORE APPS ============ -->
+<div class="topbar">
+  <div class="wrap">
+    <span class="ma-label">More apps</span>
+    <a href="https://jk-hosting.github.io/BoulderLog-App/">BoulderLog</a>
+    <span class="sep">·</span>
+    <a href="https://jk-hosting.github.io/BoulderTrain-App/">BoulderTrain</a>
+    <span class="sep">·</span>
+    <a href="https://jk-hosting.github.io/CoffeeAeye-App/">Coffee Aeye</a>
+  </div>
+</div>
 
 <!-- ============ HEADER ============ -->
 <header>
@@ -488,6 +508,12 @@
           <!-- Replace __STRIPE_PAYMENT_LINK__ with your Stripe Payment Link URL -->
           <a href="__STRIPE_PAYMENT_LINK__">Buy now</a>
           <a href="https://github.com/jk-hosting/Glide-app">Showcase</a>
+        </div>
+        <div class="foot-col">
+          <h4>More apps</h4>
+          <a href="https://jk-hosting.github.io/BoulderLog-App/">BoulderLog</a>
+          <a href="https://jk-hosting.github.io/BoulderTrain-App/">BoulderTrain</a>
+          <a href="https://jk-hosting.github.io/CoffeeAeye-App/">Coffee Aeye</a>
         </div>
       </div>
     </div>
